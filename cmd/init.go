@@ -14,12 +14,16 @@ import (
 )
 
 func init() {
-	cfg, err := config.LoadConfig()
+	initViper()
+	initFiber(":" + fmt.Sprint(AppConfig.Port))
+}
+
+func initViper() {
+	var err error
+	AppConfig, err = config.LoadConfig()
 	if err != nil {
 		log.Fatalf("Could not load config: %v", err)
 	}
-	fmt.Println("App Name:", cfg.AppName)
-	initFiber(":" + fmt.Sprint(cfg.Port))
 }
 
 func initFiber(port string) {
