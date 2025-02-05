@@ -1,0 +1,12 @@
+# Config file for Air
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build -o tmp/main.exe ./cmd"
+  bin = "tmp/main"
+  delay = 1000 # delay before restart (in ms)
+  exclude_dir = ["vendor", "tmp", "logs"]
+
+[log]
+  time = true

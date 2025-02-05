@@ -1,0 +1,17 @@
+# Binary and executable files
+*.exe
+*.out
+*.dll
+*.so
+
+# Temporary and build directories
+/tmp/
+
+# IDE and editor specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+#environment files
+.env
