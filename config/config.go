@@ -6,9 +6,11 @@ import (
 )
 
 type Config struct {
-	AppName string `mapstructure:"APP_NAME"`
-	Port    int    `mapstructure:"PORT"`
-	Debug   bool   `mapstructure:"DEBUG"`
+	AppName     string `mapstructure:"APP_NAME"`
+	Port        int    `mapstructure:"PORT"`
+	Debug       bool   `mapstructure:"DEBUG"`
+	MongoURI    string `mapstructure:"MONGO_URI"`
+	MongoDBName string `mapstructure:"MONGO_DATABASE"`
 }
 
 func LoadConfig() (*Config, error) {
