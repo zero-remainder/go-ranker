@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/zero-remainder/go-ranker/internal/routes"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func startServer(port string) {

@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/zero-remainder/go-ranker/database"
+	"github.com/zero-remainder/go-ranker/internal/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -61,4 +63,12 @@ func (p *PublicController) Traffic(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"message": "Records fetched successfully", "data": records})
+}
+
+func (p *PublicController) Analyze(c *fiber.Ctx) error {
+	url := c.Query("url")
+	if err := utils.ValidateURL(url); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.JSON(fiber.Map{"status": true, "message": "URL validated successfully", "url": url})
 }
