@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/zero-remainder/go-ranker/database"
+	"github.com/zero-remainder/go-ranker/internal/constants"
+	"github.com/zero-remainder/go-ranker/internal/models"
 	"github.com/zero-remainder/go-ranker/internal/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
@@ -18,36 +19,8 @@ func NewPublicController() *PublicController {
 	return &PublicController{}
 }
 
-func (pc *PublicController) Index(c *fiber.Ctx) error {
-
-	collection := database.GetCollection("traffic")
-
-	clientIP := c.IP()
-	userAgent := c.Get("User-Agent")
-	host := c.Hostname()
-
-	testData := bson.M{
-		"ipAddress": clientIP,
-		"userAgent": userAgent,
-		"host":      host,
-		"createdAt": time.Now(),
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	result, err := collection.InsertOne(ctx, testData)
-	if err != nil {
-		return c.JSON(fiber.Map{"status": false, "message": "Error inserting test record"})
-	}
-
-	fmt.Println("Inserted test record with ID:", result.InsertedID)
-
-	return c.JSON(fiber.Map{"status": true, "message": "Go Ranker", "data": testData, "recordId": result.InsertedID})
-}
-
 func (p *PublicController) Traffic(c *fiber.Ctx) error {
-	collection := database.GetCollection("traffic")
+	collection := database.GetCollection(constants.AnalyzeRequestsCollection)
 
 	cursor, err := collection.Find(context.TODO(), bson.M{})
 	if err != nil {
@@ -70,5 +43,28 @@ func (p *PublicController) Analyze(c *fiber.Ctx) error {
 	if err := utils.ValidateURL(url); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
+	collection := database.GetCollection(constants.AnalyzeRequestsCollection)
+
+	clientIP := c.IP()
+	userAgent := c.Get("User-Agent")
+	host := c.Hostname()
+
+	data := models.AnalyzeRequest{
+		URL:       url,
+		IP:        clientIP,
+		UserAgent: userAgent,
+		Host:      host,
+		CreatedAt: time.Now(),
+		Status:    false,
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := collection.InsertOne(ctx, data)
+	if err != nil {
+		return c.JSON(fiber.Map{"status": false, "message": "Error inserting test record"})
+	}
+
 	return c.JSON(fiber.Map{"status": true, "message": "URL validated successfully", "url": url})
 }
