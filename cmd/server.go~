@@ -22,11 +22,11 @@ func startServer(port string) {
 	}))
 
 	routes.SetupPublicRoutes(app)
-	app.Static("/", "./resource/build")
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendFile("./resource/build/index.html")
-	})
+	//app.Static("/", "./resource/build")
+	//
+	//app.Get("/sd", func(c *fiber.Ctx) error {
+	//	return c.SendFile("./resource/build/index.html")
+	//})
 	go func() {
 		if err := app.Listen(port); err != nil {
 			log.Fatalf("Failed to start server: %v", err)
