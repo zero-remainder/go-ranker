@@ -6,9 +6,8 @@ import (
 )
 
 func SetupPublicRoutes(app *fiber.App) {
-	publicController := controllers.NewPublicController()
-	apiGroup := app.Group("/api")
-
-	apiGroup.Get("/analyze", publicController.Analyze)
-	apiGroup.Get("/traffic-records", publicController.Traffic)
+	api := app.Group("/api")
+	auth := api.Group("/auth")
+	auth.Post("/register", controllers.Register)
+	auth.Post("/login", controllers.Login)
 }

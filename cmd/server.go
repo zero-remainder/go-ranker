@@ -14,6 +14,7 @@ import (
 
 func startServer(port string) {
 	app := fiber.New()
+	app.Static("/", "./fiber-react-app/build")
 	routes.SetupPublicRoutes(app)
 	go func() {
 		if err := app.Listen(port); err != nil {

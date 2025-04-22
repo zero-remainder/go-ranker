@@ -18,9 +18,13 @@ func initViper() {
 	if err != nil {
 		log.Fatalf("Could not load config: %v", err)
 	}
-	fmt.Println("Configuration loaded!")
+	fmt.Println("✅ Configuration loaded")
 }
 
 func connectDB() {
-	database.ConnectMongo(AppConfig)
+	err := database.ConnectPostgres(AppConfig.DatabaseURL)
+	if err != nil {
+		log.Fatalf("❌ Failed to connect to database: %v", err)
+	}
+	fmt.Println("✅ PostgreSQL connected")
 }

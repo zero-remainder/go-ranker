@@ -6,22 +6,31 @@ import (
 )
 
 type Config struct {
-	AppName     string `mapstructure:"APP_NAME"`
-	Port        int    `mapstructure:"PORT"`
-	Debug       bool   `mapstructure:"DEBUG"`
-	MongoURI    string `mapstructure:"MONGO_URI"`
-	MongoDBName string `mapstructure:"MONGO_DATABASE"`
+	AppName string `mapstructure:"APP_NAME"`
+	Port    int    `mapstructure:"PORT"`
+	Debug   bool   `mapstructure:"DEBUG"`
+
+	// PostgreSQL
+	DatabaseURL string `mapstructure:"DATABASE_URL"`
+
+	// JWT and Email
+	JWTSecret string `mapstructure:"JWT_SECRET"`
+	EmailUser string `mapstructure:"EMAIL_USER"`
+	EmailPass string `mapstructure:"EMAIL_PASS"`
 }
 
 func LoadConfig() (*Config, error) {
 	viper.SetConfigFile(".env")
 	viper.AutomaticEnv()
+
 	if err := viper.ReadInConfig(); err != nil {
 		log.Printf("Error reading config file: %v", err)
 	}
+
 	var config Config
 	if err := viper.Unmarshal(&config); err != nil {
 		return nil, err
 	}
+
 	return &config, nil
 }
