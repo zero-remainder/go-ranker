@@ -10,4 +10,7 @@ func SetupPublicRoutes(app *fiber.App) {
 	auth := api.Group("/auth")
 	auth.Post("/register", controllers.Register)
 	auth.Post("/login", controllers.Login)
+	seoController := controllers.NewSEOController()
+
+	api.Get("/analyze", seoController.AnalyzeWebsite)
 }

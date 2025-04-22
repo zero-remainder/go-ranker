@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/zero-remainder/go-ranker/internal/routes"
 	"log"
 	"os"
@@ -15,12 +14,6 @@ import (
 
 func startServer(port string) {
 	app := fiber.New()
-
-	// Enable CORS
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000", // or whatever port your React app runs on
-		AllowHeaders: "Origin, Content-Type, Accept",
-	}))
 
 	// Only setup API routes
 	routes.SetupPublicRoutes(app)
